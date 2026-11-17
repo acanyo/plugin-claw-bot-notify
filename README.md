@@ -18,6 +18,7 @@
 
 - **演示站**：[林间拾语 · xhhao.com](https://www.xhhao.com/)（Handsome）
 - **使用文档**：[微信 ClawBot 完整指南](https://docs.xhhao.com/plugins/claw-bot-notify/)
+- **下载**：[GitHub Releases](https://github.com/acanyo/plugin-claw-bot-notify/releases)
 - **QQ 交流群**：[Halo 插件主题交流群 · 766203360](https://qm.qq.com/q/dSeDeVeotq)
 
 <p align="center">
@@ -67,7 +68,7 @@
 ## 安装与绑定
 
 1. 为 **Halo 进程**配置 `CLAWBOT_MASTER_KEY`，值为 32 个随机字节的 Base64 编码，可用 `openssl rand -base64 32` 生成，配置后重启 Halo。保存原密钥，恢复加密数据时仍需要它。
-2. 先安装并启用 AI Foundation，再在 Halo Console 的插件管理中上传微信 ClawBot JAR 并启用。
+2. 先安装并启用 AI Foundation，再从 [Releases](https://github.com/acanyo/plugin-claw-bot-notify/releases) 下载 `plugin-claw-bot-notify-1.0.0.jar`，在 Halo Console 的插件管理中上传并启用。
 3. 使用超级管理员打开「微信 ClawBot」，点击「绑定微信」并扫码，按提示核对微信身份。
 4. 创建同一 Halo 用户的个人访问令牌，至少授予评论查看权限；需要引用回复时增加评论管理权限。粘贴令牌，验证后点击「确认并启用」。
 5. 给 Bot 发送 `开始`，再用一条新评论验证通知。需要 AI 时，在插件设置中启用助手并配置模型、CLI 和相应权限。
@@ -102,7 +103,7 @@
 ./gradlew build
 ```
 
-当前产物为 `build/libs/plugin-claw-bot-notify-1.0.0-SNAPSHOT.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
+当前产物为 `build/libs/plugin-claw-bot-notify-1.0.0.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
 
 本地启动专用 Halo 开发实例：
 
