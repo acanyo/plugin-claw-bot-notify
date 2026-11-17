@@ -1,0 +1,26 @@
+# Refer https://docs.halo.run/developer-guide/plugin/basics/manifest
+
+apiVersion: plugin.halo.run/v1alpha1
+kind: Plugin
+metadata:
+  # The name defines how the plugin is invoked, A unique name
+  name: claw-bot-notify
+spec:
+  enabled: true
+  requires: ">=2.27.0"
+  settingName: clawbot-settings
+  configMapName: clawbot-config
+  pluginDependencies:
+    ai-foundation: ">=1.0.0"
+  author:
+    name: Handsome
+    website: https://www.xhhao.com
+  logo: clawbot-logo.svg
+  homepage: https://www.xhhao.com
+  repo: https://github.com/acanyo/plugin-claw-bot-notify
+  issues: https://github.com/acanyo/plugin-claw-bot-notify/issues
+  displayName: "微信 ClawBot"
+  description: "在微信里收评论、写内容、管理 Halo。支持 AI 对话、评论与楼中楼引用回复、文章创作、图片上传及日报周报月报，AI 管理操作预览确认后执行。"
+  license:
+    - name: "GPL-3.0"
+      url: "https://github.com/acanyo/plugin-claw-bot-notify/blob/main/LICENSE"

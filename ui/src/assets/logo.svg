@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <title>微信 ClawBot</title>
+  <desc>微信绿色圆角底上的纯白色对话机器人，配有深灰色表情和天线，两侧是浅绿色命令括号。</desc>
+  <rect width="512" height="512" rx="116" fill="#07C160"/>
+  <path d="M256 132V161" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="256" cy="112" r="20" fill="#181818"/>
+  <path d="M190 160H322C358 160 386 188 386 224V280C386 316 358 344 322 344H232L176 383V339C147 331 126 308 126 278V224C126 188 154 160 190 160Z" fill="#FFFFFF"/>
+  <rect x="182" y="214" width="30" height="47" rx="15" fill="#181818"/>
+  <rect x="300" y="214" width="30" height="47" rx="15" fill="#181818"/>
+  <path d="M228 291C244 305 268 305 284 291" stroke="#181818" stroke-width="14" stroke-linecap="round"/>
+  <path d="M95 211L75 237L95 263M417 211L437 237L417 263" stroke="#B6ECCD" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

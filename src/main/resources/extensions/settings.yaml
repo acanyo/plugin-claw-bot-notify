@@ -1,0 +1,101 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: clawbot-settings
+spec:
+  forms:
+    - group: assistant
+      label: 智能助手
+      formSchema:
+        - $formkit: checkbox
+          name: enabled
+          label: 启用微信 AI 助手
+          value: false
+          help: 绑定主人发送的普通文本将交给 AI 处理；评论引用回复仍保留原有用法。
+        - $formkit: aiModelSelector
+          name: modelName
+          label: 对话模型
+          modelType: language
+          available: true
+          clearable: true
+          requiredFeatures:
+            - tool-call
+          help: 留空使用 AI Foundation 默认语言模型，需要支持工具调用。
+        - $formkit: checkbox
+          name: allowWrites
+          label: 允许 AI 执行写操作
+          value: true
+          help: 开启全部 CLI 写操作的预览与确认，包括内容修改、删除、上传、安装和配置管理。执行仍受站点版本、插件及 CLI 账号权限约束。
+        - $formkit: text
+          name: preferredName
+          label: AI 如何称呼我
+          value: 老板
+          validation: length:0,40
+          help: 如“小王”“站长”。留空使用“你”；仅用于与你对话，不自动放进评论、文章或瞬间。保存后下一次对话生效，清空上下文不会清除此设置。
+        - $formkit: userSelect
+          name: momentPublishUser
+          label: 瞬间发布用户
+          value: ""
+          clearable: true
+          help: 选择 Bot 发布瞬间时使用的 Halo 用户，支持搜索。文字、图片、博客总结和定时报告均使用该身份；未选择时无法生成发布预览。发布身份会写入预览，修改选择只影响新预览。可先在 Halo 用户管理创建专用 Bot 用户。
+        - $formkit: textarea
+          name: blogSummaryTemplate
+          label: 博客总结到瞬间的格式
+          value: "🤖 拾光 Bot {标题}\n{时间范围}\n\n📊 {本期}数据：\n{站点统计}\n\n✅ 完成事项：\n{完成事项}\n\n💡 {本期}寄语：{AI寄语}\n\n🎯 {下期}继续守护林间拾语"
+          rows: 14
+          validation: required|length:1,2000
+          help: 包含 {站点统计} 或 {摘要}；支持 {标题}、{时间范围}、{完成事项}、{AI寄语}、{本期}、{下期}、{文章列表}、{标签}。统计和完成事项来自真实数据，寄语由 AI 原创。正文最多 2,000 字。
+        - $formkit: select
+          name: blogSummaryVisible
+          label: 博客总结瞬间的默认可见性
+          value: PUBLIC
+          options:
+            - label: 公开
+              value: PUBLIC
+            - label: 私密
+              value: PRIVATE
+          help: 仅用于博客总结，微信中可明确指定本次可见性。生成后先预览，引用发送“确认发布”才写入。
+        - $formkit: checkbox
+          name: blogSummaryIncludeLinks
+          label: 博客总结附带原文链接
+          value: true
+          help: 在 {文章列表} 中附带实际原文链接；关闭后只列文章标题。只总结已发布的公开文章。微信发送“把本周博客总结成瞬间”即可发起。
+        - $formkit: checkbox
+          name: blogSummaryScheduleEnabled
+          label: 定时生成博客总结
+          value: false
+          help: 到点读取已发布公开文章并生成瞬间预览，通过微信通知主人，引用“确认发布”后才写入。需要启用 AI 助手和写操作；报告模板在没有新文章时也会统计站点并生成寄语；纯文章摘要模板没有新文章时跳过。首次启用从下一个计划时间开始。
+        - $formkit: select
+          name: blogSummaryScheduleCycle
+          label: 定时周期
+          value: WEEKLY
+          options:
+            - label: 按月
+              value: MONTHLY
+            - label: 按周
+              value: WEEKLY
+            - label: 按天
+              value: DAILY
+          help: 统一北京时间晚上 9 点：按天每天，按周周日，按月月末。统计上一个计划时间至本次计划时间；Halo 需保持运行，停机恢复只补最近一期。
+        - $formkit: number
+          name: maxContextChars
+          label: 上下文长度上限（字符）
+          value: 120000
+          min: 1
+          validation: required|number|min:1
+          help: 唯一的 AI 额度限制，按 Unicode 字符统计系统提示、工具定义、对话和工具结果。容量不足时移除最旧的完整对话；当前请求本身超出时提示调整容量。不限制工具轮数和历史轮数，不因闲置清空；输出使用模型自身配置。请按所选模型的上下文能力调整。
+        - $formkit: number
+          name: draftMinutes
+          label: 待确认预览有效期（分钟）
+          value: 60
+          min: 5
+          max: 1440
+          validation: required|number|between:5,1440
+        - $formkit: number
+          name: retentionDays
+          label: 历史记录保留天数
+          value: 30
+          min: 1
+          max: 365
+          validation: required|number|between:1,365
+          help: 每10分钟清理已过期的确定结果记录和加密正文，从历史列表移除；后台保留精简标记防重复。结果未知、待处理和共享审核正文保留供核查。
