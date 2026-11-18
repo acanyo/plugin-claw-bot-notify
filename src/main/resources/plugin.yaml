@@ -5,6 +5,8 @@ kind: Plugin
 metadata:
   # The name defines how the plugin is invoked, A unique name
   name: claw-bot-notify
+  annotations:
+    store.halo.run/app-id: app-orzbbie3
 spec:
   enabled: true
   requires: ">=2.27.0"
