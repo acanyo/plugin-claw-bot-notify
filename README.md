@@ -69,7 +69,7 @@
 
 **1.0.1** 新增密钥自动管理与环境安装引导。1.0.0 用户升级时请保留原主密钥。
 
-1. 先安装并启用 AI Foundation，再上传微信 ClawBot JAR 并启用。安装包见 [1.0.1 Release](https://github.com/acanyo/plugin-claw-bot-notify/releases/tag/v1.0.1)。
+1. 先安装并启用 AI Foundation，再上传微信 ClawBot JAR 并启用。安装包见 [1.0.2 Release](https://github.com/acanyo/plugin-claw-bot-notify/releases/tag/v1.0.2)。
 2. 使用超级管理员打开「微信 ClawBot」，点击「绑定微信」并扫码，按提示核对微信身份。
 3. 创建同一 Halo 用户的个人访问令牌，至少授予评论查看权限；需要引用回复时增加评论管理权限。粘贴令牌，验证后点击「确认并启用」。
 4. 给 Bot 发送 `开始`，再用一条新评论验证通知。需要 AI 时，在插件设置中启用助手并选择模型，按实际操作授予令牌权限。
@@ -106,7 +106,7 @@
 ./gradlew build
 ```
 
-当前产物为 `build/libs/plugin-claw-bot-notify-1.0.1.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
+当前产物为 `build/libs/plugin-claw-bot-notify-1.0.2.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
 
 本地启动专用 Halo 开发实例：
 

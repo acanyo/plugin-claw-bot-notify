@@ -43,7 +43,7 @@ export default definePlugin({
           searchable: true,
           menu: {
             name: '微信 ClawBot',
-            group: '工具',
+            group: 'tool',
             icon: markRaw(ClawBotMenuIcon),
             priority: 0,
           },
