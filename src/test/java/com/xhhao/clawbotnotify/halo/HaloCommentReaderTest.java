@@ -12,9 +12,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import reactor.core.publisher.Mono;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
+import run.halo.app.core.extension.content.Comment;
+import run.halo.app.extension.Ref;
 import run.halo.app.infra.ExternalUrlSupplier;
 
 class HaloCommentReaderTest {
@@ -22,7 +26,9 @@ class HaloCommentReaderTest {
     private final AtomicInteger commentReads = new AtomicInteger();
     private final AtomicReference<String> authorization = new AtomicReference<>();
     private final AtomicReference<String> verb = new AtomicReference<>();
+    private final AtomicReference<String> momentRequest = new AtomicReference<>();
     private final WechatBinding binding = new WechatBinding();
+    private int momentStatus = 200;
 
     HaloCommentReaderTest() {
         var spec = new WechatBinding.Spec();
@@ -49,6 +55,12 @@ class HaloCommentReaderTest {
                         return response.sendString(Mono.just(
                                 "{\"user\":{\"metadata\":{\"name\":\"admin\"},\"spec\":{\"disabled\":false}},\"roles\":"
                                         + (administrator ? "[{\"metadata\":{\"name\":\"super-role\"}}]" : "[]") + "}"));
+                    if (request.uri().startsWith("/apis/api.moment.halo.run/")) {
+                        momentRequest.set(request.uri());
+                        return response.status(momentStatus).sendString(Mono.just("""
+                            {"spec":{"content":{"html":"<p>照片 &amp; 近况</p><script>ignored</script>"}}}
+                            """));
+                    }
                     commentReads.incrementAndGet();
                     return response.status(commentStatus).sendString(Mono.just("""
                 {"apiVersion":"content.halo.run/v1alpha1","kind":"Comment","metadata":{"name":"a","creationTimestamp":"2026-11-13T01:00:00Z"},
@@ -93,5 +105,22 @@ class HaloCommentReaderTest {
     @Test
     void missingCommentReturnsNoBody() throws Exception {
         assertThat(reader(true, 404).get(binding, "pat", "a").block()).isNull();
+    }
+
+    @ParameterizedTest
+    @CsvSource({"200, 瞬间 · 照片 & 近况", "403, 瞬间", "404, 瞬间"})
+    void momentCaptionUsesThePatAndFallsBackWhenUnavailable(int status, String caption) throws Exception {
+        momentStatus = status;
+        var comment = new Comment();
+        comment.setSpec(new Comment.CommentSpec());
+        var ref = new Ref();
+        ref.setGroup("moment.halo.run");
+        ref.setKind("Moment");
+        ref.setName("moment-example");
+        comment.getSpec().setSubjectRef(ref);
+
+        assertThat(reader(true, 200).title(comment, "read-pat").block()).isEqualTo(caption);
+        assertThat(momentRequest).hasValue("/apis/api.moment.halo.run/v1alpha1/moments/moment-example");
+        assertThat(authorization).hasValue("Bearer read-pat");
     }
 }

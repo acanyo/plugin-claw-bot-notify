@@ -97,6 +97,28 @@ class CommentDiscoveryTest {
     }
 
     @Test
+    void scanFindsMissedMomentCommentsOnceWithinTheBindingWindow() {
+        var binding = binding(1);
+        var start = binding.getSpec().getNotificationStartAt();
+        var recent = comment("recent-moment", start.plusSeconds(1));
+        var older = comment("older-moment", start.minusSeconds(1));
+        for (var comment : java.util.List.of(recent, older)) {
+            var ref = comment.getSpec().getSubjectRef();
+            ref.setGroup("moment.halo.run");
+            ref.setKind("Moment");
+            ref.setName("moment");
+            fixture.put(comment, false);
+        }
+
+        discovery.tick(() -> true).block();
+        discovery.observe("recent-moment").block();
+
+        assertThat(tasks()).isEqualTo(1);
+        assertThat(links.forComment(1, "recent-moment").block()).isNotNull();
+        assertThat(links.forComment(1, "older-moment").block()).isNull();
+    }
+
+    @Test
     void rotatesBoundedPagesAndFindsDeletedSourcesAfterDowntime() {
         binding(1);
         for (int i = 0; i < 105; i++)

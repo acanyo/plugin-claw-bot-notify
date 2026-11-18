@@ -14,6 +14,7 @@ import run.halo.app.core.extension.content.Comment;
 import run.halo.app.extension.ListOptions;
 import run.halo.app.extension.PageRequestImpl;
 import run.halo.app.extension.ReactiveExtensionClient;
+import run.halo.app.extension.Ref;
 
 /** The controller is a prompt hint; rotating bounded pages repair missed hints after downtime. */
 @Component
@@ -75,8 +76,13 @@ public class CommentDiscovery {
         var ref = comment.getSpec() == null ? null : comment.getSpec().getSubjectRef();
         return comment.getMetadata().getDeletionTimestamp() == null
                 && ref != null
-                && "content.halo.run".equals(ref.getGroup())
-                && ("Post".equals(ref.getKind()) || "SinglePage".equals(ref.getKind()));
+                && (isMoment(ref)
+                        || ("content.halo.run".equals(ref.getGroup())
+                                && ("Post".equals(ref.getKind()) || "SinglePage".equals(ref.getKind()))));
+    }
+
+    public static boolean isMoment(Ref ref) {
+        return "moment.halo.run".equals(ref.getGroup()) && "Moment".equals(ref.getKind());
     }
 
     public Mono<Void> tick(BooleanSupplier active) {

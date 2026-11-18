@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.xhhao.clawbotnotify.comment.CommentDiscovery;
 import com.xhhao.clawbotnotify.model.WechatBinding;
 import java.nio.charset.StandardCharsets;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Mono;
@@ -50,6 +51,19 @@ public class HaloCommentReader {
 
     public Mono<String> title(Comment comment, String token) {
         var ref = comment.getSpec().getSubjectRef();
+        if (CommentDiscovery.isMoment(ref)) {
+            return halo.get(token, "/apis/api.moment.halo.run/v1alpha1/moments/" + segment(ref.getName()), true)
+                    .map(moment -> {
+                        var content = moment.path("spec").path("content");
+                        String html = content.path("html").asText("");
+                        String text = Jsoup.parseBodyFragment(
+                                        html.isBlank() ? content.path("raw").asText("") : html)
+                                .text();
+                        return text.isBlank() ? "瞬间" : "瞬间 · " + text;
+                    })
+                    .defaultIfEmpty("瞬间")
+                    .onErrorReturn("瞬间");
+        }
         String plural = "Post".equals(ref.getKind()) ? "posts" : "singlepages";
         String fallback = "Post".equals(ref.getKind()) ? "文章（未取得标题）" : "独立页面（未取得标题）";
         return halo.get(token, "/apis/content.halo.run/v1alpha1/" + plural + "/" + segment(ref.getName()), true)

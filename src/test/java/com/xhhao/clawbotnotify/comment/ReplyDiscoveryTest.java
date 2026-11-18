@@ -10,6 +10,8 @@ import com.xhhao.clawbotnotify.model.*;
 import com.xhhao.clawbotnotify.support.ExtensionFixture;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import reactor.core.publisher.Mono;
 import run.halo.app.core.extension.content.Comment;
 import run.halo.app.core.extension.content.Reply;
@@ -79,8 +81,13 @@ class ReplyDiscoveryTest {
                 .getTotal();
     }
 
-    @Test
-    void newRepliesUnderOldParentsHaveIndependentCodesAndDoNotDuplicateAfterRestart() {
+    @ParameterizedTest
+    @CsvSource({"content.halo.run, Post", "moment.halo.run, Moment"})
+    void newRepliesUnderOldParentsHaveIndependentCodesAndDoNotDuplicateAfterRestart(String group, String kind) {
+        var storedParent = fixture.get(Comment.class, "old-root");
+        storedParent.getSpec().getSubjectRef().setGroup(group);
+        storedParent.getSpec().getSubjectRef().setKind(kind);
+        fixture.put(storedParent, false);
         reply("a");
         reply("b");
         discovery().observe("a").block();
