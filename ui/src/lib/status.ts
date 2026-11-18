@@ -35,7 +35,8 @@ export const deliveryLabels: Record<string, string> = {
 const errorMessages: Record<string, string> = {
   CREDENTIAL_RESTORE_FAILED:
     '无法恢复已保存的凭证，收发已停止。请检查存储及原有加密密钥，或重新绑定。',
-  CREDENTIAL_KEY_REQUIRED: '服务端尚未配置凭证加密密钥，请按安装说明配置后重启 Halo。',
+  CREDENTIAL_KEY_REQUIRED:
+    '无法读取或创建凭证加密密钥，请检查 Halo 持久化目录的写入权限和原有密钥。',
   HALO_COMMENT_READ_FAILED:
     '暂时无法读取评论。请检查 PAT 有效期及“评论查看”权限；保留任务，恢复权限后重试。',
   SOURCE_UNAVAILABLE: '源评论已删除或已不符合当前通知范围，任务已取消。',

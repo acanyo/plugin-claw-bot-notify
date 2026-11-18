@@ -16,6 +16,9 @@
 // May contain unused imports in some cases
 // @ts-ignore
 import type { AssistantDependency } from './assistant-dependency';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Status } from './status';
 
 /**
  * 
@@ -59,6 +62,12 @@ export interface AssistantRuntimeView {
      * @memberof AssistantRuntimeView
      */
     'cli'?: AssistantDependency;
+    /**
+     * 
+     * @type {Status}
+     * @memberof AssistantRuntimeView
+     */
+    'cliSetup'?: Status;
     /**
      * 
      * @type {number}

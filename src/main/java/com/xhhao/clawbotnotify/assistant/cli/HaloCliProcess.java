@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -21,12 +22,17 @@ public class HaloCliProcess {
     private final String profile;
     private final Duration timeout;
     private final ObjectMapper json = new ObjectMapper();
+    private ManagedCliRuntime runtime;
+    private ManagedCliCredentials credentials;
 
-    public HaloCliProcess() {
+    @Autowired
+    public HaloCliProcess(ManagedCliRuntime runtime, ManagedCliCredentials credentials) {
         this(
                 value("CLAWBOT_HALO_CLI_EXECUTABLE", "halo"),
                 value("CLAWBOT_HALO_CLI_PROFILE", "clawbot"),
                 Duration.ofSeconds(40));
+        this.runtime = runtime;
+        this.credentials = credentials;
     }
 
     public HaloCliProcess(String executable, String profile, Duration timeout) {
@@ -53,6 +59,10 @@ public class HaloCliProcess {
         return profile;
     }
 
+    public boolean managed() {
+        return runtime != null && runtime.managed();
+    }
+
     public record Result(int exitCode, Object output, String stderr) {}
 
     public Mono<String> help(List<String> path) {
@@ -66,14 +76,18 @@ public class HaloCliProcess {
     }
 
     public Mono<Result> invoke(List<String> arguments, String stdin) {
-        return Mono.fromCallable(() -> blocking(arguments, stdin))
-                .subscribeOn(Schedulers.boundedElastic())
+        Mono<List<String>> prefix = runtime == null ? Mono.just(List.of(executable)) : runtime.command();
+        boolean managed = runtime != null && runtime.managed();
+        boolean help = arguments.contains("--help") || arguments.contains("--version");
+        Mono<String> header = managed && !help ? credentials.header(profile) : Mono.just("{}");
+        return prefix.flatMap(command -> header.flatMap(auth -> Mono.fromCallable(() -> blocking(
+                                command, arguments, managed ? auth + "\n" + (stdin == null ? "" : stdin) : stdin))
+                        .subscribeOn(Schedulers.boundedElastic())))
                 .onErrorMap(error -> new IllegalStateException(safeCode(error)));
     }
 
-    private Result blocking(List<String> arguments, String stdin) throws Exception {
-        var command = new ArrayList<String>();
-        command.add(executable);
+    private Result blocking(List<String> prefix, List<String> arguments, String stdin) throws Exception {
+        var command = new ArrayList<String>(prefix);
         command.addAll(arguments);
         Process process;
         try {
@@ -82,6 +96,8 @@ public class HaloCliProcess {
             environment.clear();
             for (var name : List.of(
                     "PATH",
+                    "SystemRoot",
+                    "WINDIR",
                     "HOME",
                     "XDG_CONFIG_HOME",
                     "XDG_RUNTIME_DIR",
@@ -152,7 +168,7 @@ public class HaloCliProcess {
         while (error instanceof java.util.concurrent.ExecutionException && error.getCause() != null)
             error = error.getCause();
         String code = error.getMessage();
-        return code != null && code.matches("CLI_[A-Z_]{1,60}") ? code : "CLI_FAILED";
+        return code != null && code.matches("(?:CLI_|BINDING_|CREDENTIAL_)[A-Z_]{1,60}") ? code : "CLI_FAILED";
     }
 
     private static String value(String name, String fallback) {

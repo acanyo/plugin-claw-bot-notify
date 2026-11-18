@@ -11,6 +11,24 @@ import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 
 class AssistantRuntimeServiceTest {
+    @Test
+    void preparationStatusReturnsImmediatelyWithoutStartingAQueryAndRetryIsExplicit() throws Exception {
+        var f = new AssistantFixture();
+        when(f.model.available(any())).thenReturn(Mono.just(true));
+        var cliRuntime = mock(com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime.class);
+        when(cliRuntime.status())
+                .thenReturn(new com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime.Status(
+                        "MANAGED", "DOWNLOADING_NODE", "1.4.0", "22.23.5", null, null, null));
+        var cleaner = new AssistantMaintenance(f.resources.client, f.secrets, f.settings, f.history, media());
+        var service = new AssistantRuntimeService(f.settings, f.model, f.tools, cleaner, cliRuntime);
+        var status = service.status().block();
+        assertThat(status.cli().errorCode()).isEqualTo("CLI_PREPARING");
+        assertThat(status.cliSetup().state()).isEqualTo("DOWNLOADING_NODE");
+        verifyNoInteractions(f.cli);
+        service.retryCli().block();
+        verify(cliRuntime).retry();
+    }
+
     private static com.xhhao.clawbotnotify.media.WechatMediaInbox media() {
         var media = org.mockito.Mockito.mock(com.xhhao.clawbotnotify.media.WechatMediaInbox.class);
         org.mockito.Mockito.when(media.cleanup()).thenReturn(reactor.core.publisher.Mono.empty());

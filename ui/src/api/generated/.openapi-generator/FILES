@@ -13,6 +13,8 @@ models/assistant-dependency.ts
 models/assistant-runtime-view.ts
 models/binding-view.ts
 models/change.ts
+models/cli-environment.ts
+models/cli-setup-progress.ts
 models/command-detail.ts
 models/command-page.ts
 models/command-view.ts
@@ -26,5 +28,6 @@ models/move-operation.ts
 models/page.ts
 models/remove-operation.ts
 models/replace-operation.ts
+models/status.ts
 models/test-operation.ts
 models/verify-code-request.ts

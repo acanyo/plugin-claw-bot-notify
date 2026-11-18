@@ -1,0 +1,15 @@
+{
+  "name": "clawbot-managed-halo-cli",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test adapter.test.mjs"
+  },
+  "dependencies": {
+    "@halo-dev/cli": "1.4.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

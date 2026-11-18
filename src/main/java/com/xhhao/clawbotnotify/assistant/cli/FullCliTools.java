@@ -44,6 +44,10 @@ public final class FullCliTools {
     public Mono<Object> execute(
             InboundCommand command, Map<String, Object> input, boolean writes, Supplier<Mono<Void>> preflight) {
         return timed(command, catalog.resolve(input)).flatMap(invocation -> {
+            if (cli.managed()
+                    && invocation.write()
+                    && invocation.path().getFirst().equals("auth"))
+                return Mono.error(new IllegalStateException("CLI_AUTH_MANAGED"));
             if (invocation.write() && !writes) return Mono.error(new IllegalStateException("AI_WRITES_DISABLED"));
             return site(invocation, preflight).then(Mono.defer(() -> {
                 if (!invocation.write()) return run(command, invocation);
@@ -104,6 +108,10 @@ public final class FullCliTools {
             Supplier<Mono<Void>> preflight,
             java.util.function.Function<HaloCliCatalog.Invocation, Mono<Object>> publisher) {
         return timed(command, catalog.resolveFresh(draft.input())).flatMap(invocation -> {
+            if (cli.managed()
+                    && invocation.write()
+                    && invocation.path().getFirst().equals("auth"))
+                return Mono.error(new IllegalStateException("CLI_AUTH_MANAGED"));
             if (draft.fingerprint() != null && !draft.fingerprint().equals(StableIds.hash(invocation.contract())))
                 return Mono.error(new IllegalStateException("CLI_CONTRACT_CHANGED"));
             // Includes exact stdin; a second subscriber cannot dispatch even if native execution failed.

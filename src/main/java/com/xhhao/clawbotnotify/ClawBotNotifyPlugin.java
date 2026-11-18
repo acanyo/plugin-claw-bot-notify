@@ -36,18 +36,21 @@ public class ClawBotNotifyPlugin extends BasePlugin {
     private final BindingService bindings;
     private final AssistantMaintenance maintenance;
     private final BlogSummaryScheduler summaryScheduler;
+    private final com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime cliRuntime;
 
     public ClawBotNotifyPlugin(
             PluginContext pluginContext,
             SchemeManager schemes,
             BindingService bindings,
             AssistantMaintenance maintenance,
-            BlogSummaryScheduler summaryScheduler) {
+            BlogSummaryScheduler summaryScheduler,
+            com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime cliRuntime) {
         super(pluginContext);
         this.schemes = schemes;
         this.bindings = bindings;
         this.maintenance = maintenance;
         this.summaryScheduler = summaryScheduler;
+        this.cliRuntime = cliRuntime;
     }
 
     @Override
@@ -121,11 +124,13 @@ public class ClawBotNotifyPlugin extends BasePlugin {
             log.warn("ClawBot recovery paused; check credential storage and binding state");
         }
         maintenance.start();
+        cliRuntime.start();
         summaryScheduler.start();
     }
 
     @Override
     public void stop() {
+        cliRuntime.stop();
         summaryScheduler.stop();
         maintenance.stop();
         try {

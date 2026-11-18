@@ -8,6 +8,15 @@ export default definePlugin({
     {
       parentName: 'Root',
       route: {
+        path: '/clawbot/setup',
+        name: 'ClawBotSetup',
+        component: () => import('./views/SetupView.vue'),
+        meta: { title: 'ClawBot 环境设置', permissions: ['*'], searchable: true, hideFooter: true },
+      },
+    },
+    {
+      parentName: 'Root',
+      route: {
         path: '/clawbot/records',
         name: 'ClawBotRecords',
         component: () => import('./views/RecordsView.vue'),

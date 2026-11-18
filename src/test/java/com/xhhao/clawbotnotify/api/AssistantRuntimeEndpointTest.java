@@ -28,13 +28,20 @@ class AssistantRuntimeEndpointTest {
 
     @Test
     void unauthorizedStatusReadsCannotLaunchDependencyChecks() {
-        for (String authority : new String[] {null, "ROLE_authenticated"})
+        for (String authority : new String[] {null, "ROLE_authenticated"}) {
             client(authority)
                     .get()
                     .uri("/assistant/runtime")
                     .exchange()
                     .expectStatus()
                     .isForbidden();
+            client(authority)
+                    .post()
+                    .uri("/assistant/runtime/cli/retry")
+                    .exchange()
+                    .expectStatus()
+                    .isForbidden();
+        }
         verifyNoInteractions(runtime);
     }
 

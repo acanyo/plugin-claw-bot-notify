@@ -29,6 +29,10 @@ public class AssistantRuntimeEndpoint implements CustomEndpoint {
                         "/assistant/runtime",
                         request -> ok(runtime.status()),
                         b -> operation(b, "GetClawBotAssistantRuntime", AssistantRuntimeView.class))
+                .POST(
+                        "/assistant/runtime/cli/retry",
+                        request -> ok(runtime.retryCli()),
+                        b -> operation(b, "RetryClawBotCliSetup", AssistantRuntimeView.class))
                 .build()
                 .filter((request, next) -> admin(request)
                         .flatMap(ignored -> next.handle(request))

@@ -37,6 +37,9 @@ class ClawBotNotifyPluginTest {
     @Mock
     com.xhhao.clawbotnotify.assistant.summary.BlogSummaryScheduler summaryScheduler;
 
+    @Mock
+    com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime cliRuntime;
+
     @InjectMocks
     ClawBotNotifyPlugin plugin;
 
@@ -50,6 +53,8 @@ class ClawBotNotifyPluginTest {
         verify(bindings).stop();
         verify(summaryScheduler).start();
         verify(summaryScheduler).stop();
+        verify(cliRuntime).start();
+        verify(cliRuntime).stop();
         verify(schemes, times(4)).unregister(any());
     }
 

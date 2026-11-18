@@ -104,7 +104,7 @@ function credential(data: { token: string }) {
       扫码绑定微信，验证 Halo 访问令牌后启用连接。
     </p>
     <p v-if="!binding.credentialStorageReady" class="cb-notice" role="alert">
-      请先按安装说明为 Halo 配置凭证加密密钥，再重启 Halo。配置完成后即可开始绑定。
+      无法读取或创建凭证加密密钥。请检查 Halo 持久化目录的写入权限，并保留原有密钥文件。
     </p>
     <p v-if="binding.errorCode" class="cb-notice" role="alert">
       {{ errorMessage(binding.errorCode) }}

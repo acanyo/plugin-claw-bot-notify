@@ -5,3 +5,4 @@ pluginManagement {
 }
 rootProject.name = 'plugin-claw-bot-notify'
 include 'ui'
+include 'managed-cli'

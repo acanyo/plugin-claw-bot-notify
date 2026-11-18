@@ -1,0 +1,26 @@
+plugins {
+    id 'base'
+    id 'com.github.node-gradle.node' version '7.1.0'
+}
+
+tasks.register('installDependencies', NpmTask) {
+    args = ['ci', '--ignore-scripts', '--no-audit', '--no-fund']
+    inputs.files('package.json', 'package-lock.json')
+    outputs.dir('node_modules')
+}
+
+tasks.register('bundle', NpmTask) {
+    args = ['run', 'build']
+    dependsOn tasks.named('installDependencies')
+    inputs.files('package.json', 'package-lock.json', 'build.mjs', 'adapter.mjs', 'keyring.mjs', 'NODE-LICENSE', 'runtimes.json')
+    outputs.dir(layout.buildDirectory.dir('dist'))
+    outputs.dir(layout.buildDirectory.dir('installer'))
+}
+
+tasks.register('testAdapter', NpmTask) {
+    args = ['test']
+    dependsOn tasks.named('bundle')
+}
+
+tasks.named('assemble') { dependsOn tasks.named('bundle') }
+tasks.named('check') { dependsOn tasks.named('testAdapter') }

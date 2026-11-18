@@ -77,3 +77,14 @@ tasks.register('processUiResources', Sync) {
 tasks.named('classes') {
     dependsOn tasks.named('processUiResources')
 }
+
+tasks.register('processManagedCliResources', Sync) {
+    from project(':managed-cli').layout.buildDirectory.dir('installer')
+    into layout.buildDirectory.dir('resources/main/managed-cli')
+    dependsOn project(':managed-cli').tasks.named('assemble')
+    shouldRunAfter tasks.named('processResources')
+}
+
+tasks.named('classes') {
+    dependsOn tasks.named('processManagedCliResources')
+}

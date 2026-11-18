@@ -62,20 +62,23 @@
 | ------------- | --------------------------------------------------------------- |
 | Halo          | 2.27.0 或更高版本，Java 21                                      |
 | AI Foundation | 1.0.0 或更高版本，安装插件前需先启用此依赖                      |
-| AI 助手       | 支持工具调用的语言模型；在 Halo 运行环境安装、配置官方 Halo CLI |
+| AI 助手       | 支持工具调用的语言模型；环境引导页检测并安装 Halo CLI |
 | 瞬间相关功能  | 安装并启用 Halo 瞬间插件，选择发布用户并授予对应权限            |
 
 ## 安装与绑定
 
-1. 为 **Halo 进程**配置 `CLAWBOT_MASTER_KEY`，值为 32 个随机字节的 Base64 编码，可用 `openssl rand -base64 32` 生成，配置后重启 Halo。保存原密钥，恢复加密数据时仍需要它。
-2. 先安装并启用 AI Foundation，再从 [Releases](https://github.com/acanyo/plugin-claw-bot-notify/releases) 下载 `plugin-claw-bot-notify-1.0.0.jar`，在 Halo Console 的插件管理中上传并启用。
-3. 使用超级管理员打开「微信 ClawBot」，点击「绑定微信」并扫码，按提示核对微信身份。
-4. 创建同一 Halo 用户的个人访问令牌，至少授予评论查看权限；需要引用回复时增加评论管理权限。粘贴令牌，验证后点击「确认并启用」。
-5. 给 Bot 发送 `开始`，再用一条新评论验证通知。需要 AI 时，在插件设置中启用助手并配置模型、CLI 和相应权限。
+**1.0.1** 新增密钥自动管理与环境安装引导。1.0.0 用户升级时请保留原主密钥。
+
+1. 先安装并启用 AI Foundation，再上传微信 ClawBot JAR 并启用。安装包见 [1.0.1 Release](https://github.com/acanyo/plugin-claw-bot-notify/releases/tag/v1.0.1)。
+2. 使用超级管理员打开「微信 ClawBot」，点击「绑定微信」并扫码，按提示核对微信身份。
+3. 创建同一 Halo 用户的个人访问令牌，至少授予评论查看权限；需要引用回复时增加评论管理权限。粘贴令牌，验证后点击「确认并启用」。
+4. 给 Bot 发送 `开始`，再用一条新评论验证通知。需要 AI 时，在插件设置中启用助手并选择模型，按实际操作授予令牌权限。
+
+首次启用自动生成加密密钥，保存到 Halo 工作目录的 `clawbot/master.key`。打开「环境设置」引导页，插件会检测 **Halo 服务器**的系统、CPU 架构、已有 Node.js、CLI 和目录权限；点击「下载并安装」后才下载当前平台的 Node.js 运行版及固定版本 CLI，显示下载、校验和安装进度。已有兼容 Node.js 会复用，失败可重试。服务器需访问 `nodejs.org` 与 `registry.npmjs.org`；用户无需安装 npm、系统凭证库或执行 CLI 登录命令，授权与绑定 PAT 同步。可暂时跳过工具安装，先绑定微信。
 
 **升级**：在插件管理中升级 JAR，已有微信绑定和设置会保留，无需重新扫码。
 
-密钥配置、令牌权限和连接管理的完整步骤见[安装与微信绑定](https://docs.xhhao.com/plugins/claw-bot-notify/installation)。
+请单独备份 `clawbot/master.key`；恢复加密数据需要原密钥。旧部署的 `CLAWBOT_MASTER_KEY` 和 `CLAWBOT_HALO_CLI_EXECUTABLE` 配置继续优先使用，无需更换。若要从外部 CLI 切换到托管模式，仅移除 `CLAWBOT_HALO_CLI_EXECUTABLE` 后重启 Halo，再打开环境设置；保留原主密钥。令牌权限和连接管理见[安装与微信绑定](https://docs.xhhao.com/plugins/claw-bot-notify/installation)。
 
 ## 在微信里使用
 
@@ -103,7 +106,7 @@
 ./gradlew build
 ```
 
-当前产物为 `build/libs/plugin-claw-bot-notify-1.0.0.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
+当前产物为 `build/libs/plugin-claw-bot-notify-1.0.1.jar`，构建包含 Java 测试、格式检查和 Vue 类型检查。
 
 本地启动专用 Halo 开发实例：
 

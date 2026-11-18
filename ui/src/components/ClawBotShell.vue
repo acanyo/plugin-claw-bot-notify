@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 import logoUrl from '@/assets/logo.svg?url'
 import '@/styles/workspace.css'
 
-defineProps<{ section: 'connection' | 'records'; title: string; description: string }>()
+defineProps<{ section: 'connection' | 'records' | 'setup'; title: string; description: string }>()
 </script>
 
 <template>
@@ -25,6 +25,12 @@ defineProps<{ section: 'connection' | 'records'; title: string; description: str
           :class="{ active: section === 'records' }"
           :aria-current="section === 'records' ? 'page' : undefined"
           >记录</RouterLink
+        >
+        <RouterLink
+          to="/clawbot/setup"
+          :class="{ active: section === 'setup' }"
+          :aria-current="section === 'setup' ? 'page' : undefined"
+          >环境设置</RouterLink
         >
       </nav>
       <div class="cb-header-actions"><slot name="actions" /></div>

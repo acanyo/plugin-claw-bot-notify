@@ -1,5 +1,5 @@
 #!/bin/sh
-# Starts the existing dedicated local test instance and its CLI credential service.
+# Starts the existing dedicated local test instance. Managed CLI needs no keyring.
 set -eu
 script_dir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 if ! docker info >/dev/null 2>&1; then
@@ -13,7 +13,7 @@ if [ ! -f "$config" ]; then
   chmod 600 "$config"
 fi
 docker start clawbot-m1-smoke >/dev/null
-if docker exec clawbot-m1-smoke test -x /usr/local/bin/halo; then
+if docker exec clawbot-m1-smoke sh -c 'test -n "${CLAWBOT_HALO_CLI_EXECUTABLE:-}" && test -x /usr/local/bin/halo'; then
   docker cp "$script_dir/start-local-keyring.sh" clawbot-m1-smoke:/opt/clawbot/start-keyring.sh >/dev/null
   docker exec clawbot-m1-smoke sh /opt/clawbot/start-keyring.sh
 fi

@@ -33,7 +33,7 @@ export interface TestOperation {
      */
     'path': string;
     /**
-     * Value can be any JSON value
+     * 
      * @type {any}
      * @memberof TestOperation
      */

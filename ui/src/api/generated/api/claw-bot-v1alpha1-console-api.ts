@@ -36,6 +36,8 @@ import type { HaloCredentialRequest } from '../models';
 // @ts-ignore
 import type { Page } from '../models';
 // @ts-ignore
+import type { Status } from '../models';
+// @ts-ignore
 import type { VerifyCodeRequest } from '../models';
 /**
  * ClawBotV1alpha1ConsoleApi - axios parameter creator
@@ -164,6 +166,43 @@ export const ClawBotV1alpha1ConsoleApiAxiosParamCreator = function (configuratio
             if (idempotencyKey != null) {
                 localVarHeaderParameter['Idempotency-Key'] = String(idempotencyKey);
             }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        detectClawBotEnvironment: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/apis/console.api.clawbot.xhhao.com/v1alpha1/assistant/setup/detect`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -314,6 +353,80 @@ export const ClawBotV1alpha1ConsoleApiAxiosParamCreator = function (configuratio
             }
 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getClawBotSetup: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/apis/console.api.clawbot.xhhao.com/v1alpha1/assistant/setup`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installClawBotTools: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/apis/console.api.clawbot.xhhao.com/v1alpha1/assistant/setup/install`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -489,6 +602,43 @@ export const ClawBotV1alpha1ConsoleApiAxiosParamCreator = function (configuratio
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retryClawBotCliSetup: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/apis/console.api.clawbot.xhhao.com/v1alpha1/assistant/runtime/cli/retry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {VerifyCodeRequest} verifyCodeRequest 
          * @param {*} [options] Override http request option.
@@ -583,6 +733,17 @@ export const ClawBotV1alpha1ConsoleApiFp = function(configuration?: Configuratio
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async detectClawBotEnvironment(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Status>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.detectClawBotEnvironment(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClawBotV1alpha1ConsoleApi.detectClawBotEnvironment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -630,6 +791,28 @@ export const ClawBotV1alpha1ConsoleApiFp = function(configuration?: Configuratio
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getClawBotSetup(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Status>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getClawBotSetup(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClawBotV1alpha1ConsoleApi.getClawBotSetup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async installClawBotTools(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Status>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.installClawBotTools(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClawBotV1alpha1ConsoleApi.installClawBotTools']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} [page] 
          * @param {number} [size] 
          * @param {string} [type] 
@@ -667,6 +850,17 @@ export const ClawBotV1alpha1ConsoleApiFp = function(configuration?: Configuratio
             const localVarAxiosArgs = await localVarAxiosParamCreator.replaceClawBotHaloCredential(id, haloCredentialRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClawBotV1alpha1ConsoleApi.replaceClawBotHaloCredential']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async retryClawBotCliSetup(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AssistantRuntimeView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.retryClawBotCliSetup(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClawBotV1alpha1ConsoleApi.retryClawBotCliSetup']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -721,6 +915,14 @@ export const ClawBotV1alpha1ConsoleApiFactory = function (configuration?: Config
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        detectClawBotEnvironment(options?: RawAxiosRequestConfig): AxiosPromise<Status> {
+            return localVarFp.detectClawBotEnvironment(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {ClawBotV1alpha1ConsoleApiDisconnectClawBotBindingRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -756,6 +958,22 @@ export const ClawBotV1alpha1ConsoleApiFactory = function (configuration?: Config
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getClawBotSetup(options?: RawAxiosRequestConfig): AxiosPromise<Status> {
+            return localVarFp.getClawBotSetup(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        installClawBotTools(options?: RawAxiosRequestConfig): AxiosPromise<Status> {
+            return localVarFp.installClawBotTools(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {ClawBotV1alpha1ConsoleApiListClawBotCommandsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -780,6 +998,14 @@ export const ClawBotV1alpha1ConsoleApiFactory = function (configuration?: Config
          */
         replaceClawBotHaloCredential(requestParameters: ClawBotV1alpha1ConsoleApiReplaceClawBotHaloCredentialRequest, options?: RawAxiosRequestConfig): AxiosPromise<BindingView> {
             return localVarFp.replaceClawBotHaloCredential(requestParameters.id, requestParameters.haloCredentialRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        retryClawBotCliSetup(options?: RawAxiosRequestConfig): AxiosPromise<AssistantRuntimeView> {
+            return localVarFp.retryClawBotCliSetup(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1024,6 +1250,16 @@ export class ClawBotV1alpha1ConsoleApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClawBotV1alpha1ConsoleApi
+     */
+    public detectClawBotEnvironment(options?: RawAxiosRequestConfig) {
+        return ClawBotV1alpha1ConsoleApiFp(this.configuration).detectClawBotEnvironment(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {ClawBotV1alpha1ConsoleApiDisconnectClawBotBindingRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1067,6 +1303,26 @@ export class ClawBotV1alpha1ConsoleApi extends BaseAPI {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClawBotV1alpha1ConsoleApi
+     */
+    public getClawBotSetup(options?: RawAxiosRequestConfig) {
+        return ClawBotV1alpha1ConsoleApiFp(this.configuration).getClawBotSetup(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClawBotV1alpha1ConsoleApi
+     */
+    public installClawBotTools(options?: RawAxiosRequestConfig) {
+        return ClawBotV1alpha1ConsoleApiFp(this.configuration).installClawBotTools(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {ClawBotV1alpha1ConsoleApiListClawBotCommandsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1096,6 +1352,16 @@ export class ClawBotV1alpha1ConsoleApi extends BaseAPI {
      */
     public replaceClawBotHaloCredential(requestParameters: ClawBotV1alpha1ConsoleApiReplaceClawBotHaloCredentialRequest, options?: RawAxiosRequestConfig) {
         return ClawBotV1alpha1ConsoleApiFp(this.configuration).replaceClawBotHaloCredential(requestParameters.id, requestParameters.haloCredentialRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClawBotV1alpha1ConsoleApi
+     */
+    public retryClawBotCliSetup(options?: RawAxiosRequestConfig) {
+        return ClawBotV1alpha1ConsoleApiFp(this.configuration).retryClawBotCliSetup(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,22 @@ public class CredentialCipher {
     private final byte[] key;
     private final SecureRandom random = new SecureRandom();
 
-    public CredentialCipher(@Value("${clawbot.master-key:${CLAWBOT_MASTER_KEY:}}") String encodedKey) {
+    @Autowired
+    public CredentialCipher(
+            @Value("${clawbot.master-key:${CLAWBOT_MASTER_KEY:}}") String encodedKey, MasterKeyStore store) {
+        this(resolveKey(encodedKey, store));
+    }
+
+    private static String resolveKey(String configured, MasterKeyStore store) {
+        if (configured != null && !configured.isBlank()) return configured;
+        try {
+            return store.loadOrCreate();
+        } catch (IllegalStateException error) {
+            return "";
+        }
+    }
+
+    public CredentialCipher(String encodedKey) {
         byte[] decoded;
         try {
             decoded = Base64.getDecoder().decode(encodedKey);

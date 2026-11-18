@@ -5,7 +5,21 @@ import IconTerminal from '~icons/ri/terminal-box-line'
 import { useAssistantRuntime } from '@/composables/useAssistantRuntime'
 import { commandExplanation } from '@/lib/commandStatus'
 import { formatDuration, formatTime } from '@/lib/status'
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { setupStages, setupTerminalStates } from '@/lib/cliSetup'
 const { status, loading, error, refresh } = useAssistantRuntime()
+const preparing = computed(
+  () =>
+    status.value?.cliSetup?.mode === 'MANAGED' &&
+    !setupTerminalStates.includes(status.value?.cliSetup?.state ?? ''),
+)
+const retryable = computed(
+  () =>
+    status.value?.cliSetup?.mode === 'MANAGED' &&
+    (status.value.cliSetup.state === 'FAILED' ||
+      ['CLI_NOT_AVAILABLE', 'CLI_HELP_UNAVAILABLE'].includes(status.value.cli?.errorCode ?? '')),
+)
 </script>
 
 <template>
@@ -51,17 +65,55 @@ const { status, loading, error, refresh } = useAssistantRuntime()
                 <h3>{{ item.label }}</h3>
                 <span
                   class="dependency-state"
-                  :data-tone="item.dependency?.available ? 'success' : 'danger'"
+                  :data-tone="
+                    item.dependency?.available
+                      ? 'success'
+                      : item.icon === IconTerminal && preparing
+                        ? undefined
+                        : 'danger'
+                  "
                 >
                   <span class="dependency-dot" aria-hidden="true" />{{
-                    item.dependency?.available ? '可用' : '不可用'
+                    item.dependency?.available
+                      ? '可用'
+                      : item.icon === IconTerminal && preparing
+                        ? '准备中'
+                        : '不可用'
                   }}
                 </span>
               </div>
-              <p v-if="item.dependency?.errorCode" class="runtime-error">
+              <p
+                v-if="item.icon === IconTerminal && preparing"
+                class="cb-description"
+                role="status"
+              >
+                {{ setupStages[status.cliSetup?.state ?? ''] ?? '正在准备' }}，完成后自动更新。
+              </p>
+              <p v-else-if="item.dependency?.errorCode" class="runtime-error">
                 {{ commandExplanation(item.dependency.errorCode) }}
               </p>
-              <p v-else class="cb-description">
+              <p
+                v-if="
+                  item.icon === IconTerminal && status.cliSetup?.mode === 'MANAGED' && !preparing
+                "
+                class="cb-description"
+              >
+                由插件自动管理，授权与微信绑定同步。
+              </p>
+              <RouterLink
+                v-if="item.icon === IconTerminal && status.cliSetup?.mode === 'MANAGED'"
+                class="runtime-setup-link"
+                to="/clawbot/setup"
+                >{{
+                  retryable || status.cliSetup?.state === 'REQUIRED'
+                    ? '打开安装引导'
+                    : '查看环境设置'
+                }}</RouterLink
+              >
+              <p
+                v-if="!item.dependency?.errorCode && !(item.icon === IconTerminal && preparing)"
+                class="cb-description"
+              >
                 检查耗时 {{ formatDuration(item.dependency?.latencyMs) }}
               </p>
             </div>
@@ -103,6 +155,16 @@ const { status, loading, error, refresh } = useAssistantRuntime()
               <dt>站点管理工具</dt>
               <dd>{{ status.cli?.name ?? 'Halo CLI' }}</dd>
             </div>
+            <div v-if="status.cliSetup">
+              <dt>工具运行环境</dt>
+              <dd>
+                {{ setupStages[status.cliSetup.state ?? ''] ?? status.cliSetup.state
+                }}<template v-if="status.cliSetup.cliVersion">
+                  · CLI {{ status.cliSetup.cliVersion }} · Node.js
+                  {{ status.cliSetup.nodeVersion }}</template
+                >
+              </dd>
+            </div>
             <div v-if="status.model?.errorCode">
               <dt>模型错误代码</dt>
               <dd>{{ status.model.errorCode }}</dd>
@@ -120,6 +182,14 @@ const { status, loading, error, refresh } = useAssistantRuntime()
 </template>
 
 <style scoped>
+.runtime-setup-link {
+  display: inline-block;
+  color: var(--cb-accent);
+  font-size: 12px;
+  margin-top: 8px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .runtime-card {
   margin-top: 20px;
   border: 1px solid var(--cb-border);

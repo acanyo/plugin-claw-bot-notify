@@ -12,7 +12,8 @@ public record AssistantRuntimeView(
         int draftMinutes,
         Instant cleanupAt,
         int cleanedBodies,
-        String cleanupErrorCode) {
+        String cleanupErrorCode,
+        com.xhhao.clawbotnotify.assistant.cli.ManagedCliRuntime.Status cliSetup) {
     @io.swagger.v3.oas.annotations.media.Schema(name = "AssistantDependency")
     public record Dependency(String name, boolean available, Long latencyMs, String errorCode) {}
 }

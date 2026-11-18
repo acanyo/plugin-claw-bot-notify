@@ -317,6 +317,7 @@ public class AssistantTools {
                                         : timedRun(command, invocation)));
                     });
                 })
+                .contextWrite(context -> context.put(ManagedCliCredentials.BINDING_CONTEXT, binding))
                 .onErrorMap(error -> new IllegalStateException(safeCode(error)));
     }
 
@@ -467,6 +468,7 @@ public class AssistantTools {
                         }));
                     });
                 })
+                .contextWrite(context -> context.put(ManagedCliCredentials.BINDING_CONTEXT, binding))
                 .onErrorMap(error -> new IllegalStateException(safeCode(error)));
     }
 

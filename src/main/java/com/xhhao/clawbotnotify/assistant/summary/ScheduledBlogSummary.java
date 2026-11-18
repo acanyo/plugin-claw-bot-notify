@@ -178,6 +178,8 @@ public class ScheduledBlogSummary {
                                         null));
                     });
                 })
+                .contextWrite(context -> context.put(
+                        com.xhhao.clawbotnotify.assistant.cli.ManagedCliCredentials.BINDING_CONTEXT, binding))
                 .onErrorResume(error -> failure(command, AssistantTools.safeCode(error)));
     }
 
